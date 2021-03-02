@@ -1,0 +1,26 @@
+DROP TABLE IF EXISTS PRODUCT;
+
+CREATE TABLE PRODUCT (
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  name VARCHAR(250) NOT NULL,
+  stock VARCHAR(250) NOT NULL,
+  price VARCHAR(250) DEFAULT NULL,
+  status VARCHAR(250) DEFAULT NULL
+);
+
+DROP TABLE IF EXISTS USER;
+
+CREATE TABLE USER (
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  name VARCHAR(250) NOT NULL,
+  lastname VARCHAR(250) NOT NULL,
+  username VARCHAR(250) NOT NULL,
+  password VARCHAR(250) NOT NULL,
+  perfil VARCHAR(250) DEFAULT NULL,
+  status VARCHAR(250) DEFAULT NULL
+);
+
+
+INSERT INTO USER (name, lastname, username, password, perfil, status) VALUES
+  ('Alex', 'Merino', 'alex','abc123', 'ADMIN','1'),
+  ('User', 'Test', 'test','abc123', 'USER','1');
