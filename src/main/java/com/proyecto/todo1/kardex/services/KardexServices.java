@@ -15,9 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,13 +64,13 @@ public class KardexServices {
         Product productTemp = null;
         ApiResponse apiResponse = null;
         try {
-            productTemp = iProductDao.findProduct(request.getName());
-            System.out.println("RESPONSE");
+            productTemp = iProductDao.findProductbyId(request.getId());
             System.out.println(productTemp.getName());
             if (productTemp != null) {
                 productTemp.setPrice(request.getPrice());
                 productTemp.setStock(request.getStock());
                 productTemp.setStatus(request.getStatus());
+                productTemp.setName(request.getName());
                 iProductDao.save(productTemp);
                 apiResponse = new ApiResponse(
                         "Update product success", String.valueOf(HttpStatus.OK.value()),
@@ -91,13 +88,13 @@ public class KardexServices {
         return new ResponseEntity<>(apiResponse, apiResponse.getStatus());
     }
 
-    public ResponseEntity<ApiResponse> deleteProduct(Integer idProduct) {
-        logger.info("1.-Delete product::::", LOGGER_REQUEST_FORMAT);
+    public ResponseEntity<ApiResponse> deleteProduct(String idProduct) {
+        logger.info("1.-Delete product of kardex", LOGGER_REQUEST_FORMAT);
         ApiResponse apiResponse = null;
-        try{
-            iProductDao.deleteById(idProduct);
-            apiResponse = new ApiResponse("Delete success", String.valueOf(HttpStatus.OK.value()),HttpStatus.OK,new Date(),null);
-        }catch(Exception ex){
+        try {
+            iProductDao.deleteById(Integer.parseInt(idProduct));
+            apiResponse = new ApiResponse("Delete success", String.valueOf(HttpStatus.OK.value()), HttpStatus.OK, new Date(), null);
+        } catch (Exception ex) {
             logger.error("It happend mistake");
             logger.info(ex.getMessage());
             throw new ApiRequestException("Mistake when delete products");
@@ -106,7 +103,7 @@ public class KardexServices {
     }
 
     public ResponseEntity<ApiResponse> products() {
-        logger.info("1.-Select users::::", LOGGER_REQUEST_FORMAT);
+        logger.info("1.-Select products", LOGGER_REQUEST_FORMAT);
         ApiResponse apiResponse = null;
         List<Product> lista = null;
         try {
@@ -125,11 +122,11 @@ public class KardexServices {
     }
 
     public ResponseEntity<Response> login(String name, String password) {
-        logger.info("1.-Login::::", LOGGER_REQUEST_FORMAT);
+        logger.info("1.- Login to System Kardex", LOGGER_REQUEST_FORMAT);
         Response response = null;
         try {
-            User user = iUserDao.findUser(name,password);
-            if(user !=null){
+            User user = iUserDao.findUser(name, password);
+            if (user != null) {
                 UserResponse userResponse = new UserResponse();
                 userResponse.setId(user.getId());
                 userResponse.setName(user.getName());
@@ -141,12 +138,12 @@ public class KardexServices {
                 response = new Response(
                         "Correct credentials", String.valueOf(HttpStatus.OK.value()),
                         HttpStatus.OK,
-                        new Date(),userResponse);
-            }else{
+                        new Date(), userResponse);
+            } else {
                 response = new Response(
                         "Incorrect credentials", String.valueOf(HttpStatus.CONFLICT.value()),
                         HttpStatus.CONFLICT,
-                        new Date(),null);
+                        new Date(), null);
             }
 
         } catch (Exception ex) {
@@ -158,7 +155,7 @@ public class KardexServices {
     }
 
     public ResponseEntity<ApiResponse> users() {
-        logger.info("1.-Users::::", LOGGER_REQUEST_FORMAT);
+        logger.info("1.- Get users ", LOGGER_REQUEST_FORMAT);
         ApiResponse apiResponse = null;
         List<User> lista = null;
         try {

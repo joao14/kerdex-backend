@@ -25,50 +25,38 @@ public class KardexController {
 
     @PostMapping(value = "/register/product")
     public ResponseEntity<Object> register(@RequestBody Request request) {
-        System.out.println("Producto de valores");
+        System.out.println("Create product");
         ResponseEntity<ApiResponse> response = kardexService.registerProduct(request);
-        System.out.println("Paso final...");
         return new ResponseEntity<>(response.getBody(), response.getBody().getStatus());
     }
 
     @PutMapping(value = "/update/product")
     public ResponseEntity<Object> update(@RequestBody Request request) {
-        System.out.println("Update...");
+        System.out.println("Update product");
         ResponseEntity<ApiResponse> response = kardexService.updateProduct(request);
-        System.out.println("Paso final...");
         return new ResponseEntity<>(response.getBody(), response.getBody().getStatus());
     }
 
     @PutMapping(value = "/delete/product")
-    public ResponseEntity<Object> delete(@RequestHeader Integer idProduct) {
-        System.out.println("Delete...");
-        ResponseEntity<ApiResponse> response = null;
-        try {
-            response = kardexService.deleteProduct(idProduct);
-        } catch (Exception e) {
-            System.out.println("Error:::");
-            System.out.println(e);
-        }
-        System.out.println("Paso final...");
+    public ResponseEntity<Object> delete(@RequestParam String idProduct) {
+        System.out.println("Delete product");
+        ResponseEntity<ApiResponse> response = kardexService.deleteProduct(idProduct);
         return new ResponseEntity<>(response.getBody(), response.getBody().getStatus());
     }
 
     @GetMapping(value = "/products")
     public ResponseEntity<Object> products() {
-        System.out.println("Search...");
+        System.out.println("Search products");
         ResponseEntity<ApiResponse> response = kardexService.products();
-        System.out.println("Paso final...");
         return new ResponseEntity<>(response.getBody(), response.getBody().getStatus());
     }
 
     @GetMapping(value = "/users")
     public ResponseEntity<Object> users() {
-        System.out.println("Users...");
+        System.out.println("Search Users");
         ResponseEntity<ApiResponse> response = kardexService.users();
-        System.out.println("Paso final...");
         return new ResponseEntity<>(response.getBody(), response.getBody().getStatus());
     }
-
 
 
 }

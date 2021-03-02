@@ -13,7 +13,7 @@ public interface IProductDao extends JpaRepository<Product, Integer> {
     @Query(value = "SELECT * FROM PRODUCT l WHERE l.name=:name", nativeQuery = true)
     public abstract Product findProduct(@Param("name") String name);
 
-    @Query(value = "SELECT * FROM PRODUCT l WHERE l.name=:name", nativeQuery = true)
-    public abstract Product findProductbyName(@Param("name") String name);
+    @Query(value = "SELECT * FROM PRODUCT l WHERE l.id=:id", nativeQuery = true)
+    public abstract Product findProductbyId(@Param("id") String id);
 
 }

@@ -15,22 +15,27 @@ import lombok.NoArgsConstructor;
 public class Request {
 
     @JsonPropertyOrder("1")
+    @JsonAlias("id")
+    @JsonProperty("id")
+    String id;
+
+    @JsonPropertyOrder("2")
     @JsonAlias("name")
     @JsonProperty("name")
     String name;
 
-    @JsonPropertyOrder("2")
+    @JsonPropertyOrder("3")
     @JsonAlias("stock")
     @JsonProperty("stock")
     Integer stock;
 
 
-    @JsonPropertyOrder("3")
+    @JsonPropertyOrder("4")
     @JsonAlias("price")
     @JsonProperty("price")
     Float price;
 
-    @JsonPropertyOrder("4")
+    @JsonPropertyOrder("5")
     @JsonAlias("status")
     @JsonProperty("status")
     String status;
