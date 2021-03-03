@@ -1,10 +1,13 @@
 package com.proyecto.todo1.kardex.services;
 
 import com.proyecto.todo1.kardex.dto.Product;
+import com.proyecto.todo1.kardex.dto.Sale;
 import com.proyecto.todo1.kardex.dto.User;
 import com.proyecto.todo1.kardex.model.Request;
+import com.proyecto.todo1.kardex.model.SaleRequest;
 import com.proyecto.todo1.kardex.model.UserResponse;
 import com.proyecto.todo1.kardex.respository.IProductDao;
+import com.proyecto.todo1.kardex.respository.ISaleDao;
 import com.proyecto.todo1.kardex.respository.IUserDao;
 import com.proyecto.todo1.kardex.util.ApiRequestException;
 import com.proyecto.todo1.kardex.util.ApiResponse;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +36,9 @@ public class KardexServices {
 
     @Autowired
     private IUserDao iUserDao;
+
+    @Autowired
+    private ISaleDao iSaleDao;
 
 
     public ResponseEntity<ApiResponse> registerProduct(Request request) {
@@ -173,5 +180,32 @@ public class KardexServices {
         return new ResponseEntity<>(apiResponse, apiResponse.getStatus());
     }
 
+    public ResponseEntity<ApiResponse> finishSales(SaleRequest saleRequest) {
+        logger.info("1.- Start finish steals ", LOGGER_REQUEST_FORMAT);
+        ApiResponse apiResponse = null;
+        try {
+            Product product = iProductDao.findProductbyId(String.valueOf(saleRequest.getId()));
+            if ((product.getStock() >= Integer.parseInt(saleRequest.getStock())) && product.getStock() > 0) {
+                iSaleDao.save(new Sale(saleRequest.getIndetification(), saleRequest.getName(), saleRequest.getMail(), saleRequest.getPhone(), product));
+                product.setStock(product.getStock() - Integer.parseInt(saleRequest.getStock()));
+                iProductDao.save(product);
+                apiResponse = new ApiResponse(
+                        "Sale complete od kardex", String.valueOf(HttpStatus.OK.value()),
+                        HttpStatus.OK,
+                        new Date(), null);
+            } else {
+                apiResponse = new ApiResponse(
+                        "Sale incomplete because the stock product is sold out", String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED,
+                        new Date(), null);
+            }
+
+        } catch (Exception ex) {
+            logger.error("It happend mistake");
+            logger.info(ex.getMessage());
+            throw new ApiRequestException("Mistake in finish sales");
+        }
+        return new ResponseEntity<>(apiResponse, apiResponse.getStatus());
+    }
 
 }

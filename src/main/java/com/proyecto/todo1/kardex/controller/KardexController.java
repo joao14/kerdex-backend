@@ -1,6 +1,7 @@
 package com.proyecto.todo1.kardex.controller;
 
 import com.proyecto.todo1.kardex.model.Request;
+import com.proyecto.todo1.kardex.model.SaleRequest;
 import com.proyecto.todo1.kardex.services.KardexServices;
 import com.proyecto.todo1.kardex.util.ApiResponse;
 import org.slf4j.Logger;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/api/kardex/v1")
@@ -55,6 +55,13 @@ public class KardexController {
     public ResponseEntity<Object> users() {
         System.out.println("Search Users");
         ResponseEntity<ApiResponse> response = kardexService.users();
+        return new ResponseEntity<>(response.getBody(), response.getBody().getStatus());
+    }
+
+    @PostMapping(value = "/sale/finish")
+    public ResponseEntity<Object> sale(@RequestBody SaleRequest saleRequest) {
+        System.out.println("Finish sales");
+        ResponseEntity<ApiResponse> response = kardexService.finishSales(saleRequest);
         return new ResponseEntity<>(response.getBody(), response.getBody().getStatus());
     }
 
